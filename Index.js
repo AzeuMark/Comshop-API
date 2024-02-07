@@ -1,6 +1,7 @@
 //OUTSIDE API
 const JsonHandler = require('./MyDataBase');
 const jsonHandler = new JsonHandler('MyJsonData.json');
+const jsonPCStatus = new JsonHandler('MyPCStatus.json');
 
 // API
 const express = require('express');
@@ -122,4 +123,88 @@ app.get('/developer/getmessage', (req, res) => {
     return res.status(200).send({
         developer_message : `${developer_message}`
     });
+});
+
+// PC's Status
+app.put('/pc-status/edit', (req, res) => {
+    const { JPC1, JPC2, JPC3, JPC4, DPC1, DPC2, DPC3 } = req.body;
+
+    // J
+    if (JPC1 === undefined || (JPC1.toUpperCase() !== "ON" && JPC1.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid JPC1, must be ON or OFF!");
+    } else if (JPC2 === undefined || (JPC2.toUpperCase() !== "ON" && JPC2.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid JPC2, must be ON or OFF!");
+    } else if (JPC3 === undefined || (JPC3.toUpperCase() !== "ON" && JPC3.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid JPC3, must be ON or OFF!");
+    } else if (JPC4 === undefined || (JPC4.toUpperCase() !== "ON" && JPC4.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid JPC4, must be ON or OFF!");
+    }
+
+    // D
+    if (DPC1 === undefined || (DPC1.toUpperCase() !== "ON" && DPC1.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid DPC1, must be ON or OFF!");
+    } else if (DPC2 === undefined || (DPC2.toUpperCase() !== "ON" && DPC2.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid DPC2, must be ON or OFF!");
+    } else if (DPC3 === undefined || (DPC3.toUpperCase() !== "ON" && DPC3.toUpperCase() !== "OFF")) {
+        return res.status(400).send("Invalid DPC3, must be ON or OFF!");
+    }
+   
+    // Edit J
+    jsonPCStatus.editPCStatusValue(`JPC1`, JPC1);
+    jsonPCStatus.editPCStatusValue(`JPC2`, JPC2);
+    jsonPCStatus.editPCStatusValue(`JPC3`, JPC3);
+    jsonPCStatus.editPCStatusValue(`JPC4`, JPC4);
+
+    // Edit D
+    jsonPCStatus.editPCStatusValue(`DPC1`, DPC1);
+    jsonPCStatus.editPCStatusValue(`DPC2`, DPC2);
+    jsonPCStatus.editPCStatusValue(`DPC3`, DPC3);
+    
+    return res.status(202).send(`STATUS CODE: 202 Accepted!<br>Check your updated statuses here. <a href="/pc-status/get">/pc-status/get</a>`);
+});
+
+app.put('/pc-hide/edit', (req, res) => {
+    const { JPC1_Hide, JPC2_Hide, JPC3_Hide, JPC4_Hide, DPC1_Hide, DPC2_Hide, DPC3_Hide } = req.body;
+
+    // Hide J
+    if (JPC1_Hide === undefined || typeof JPC1_Hide !== 'boolean') {
+        return res.status(400).send("Invalid JPC1_Hide, must be true or false!");
+    }else if (JPC2_Hide === undefined || typeof JPC2_Hide !== 'boolean') {                          
+        return res.status(400).send("Invalid JPC2_Hide, must be true or false!");
+    }else if (JPC3_Hide === undefined || typeof JPC3_Hide !== 'boolean') {                          
+        return res.status(400).send("Invalid JPC3_Hide, must be true or false!");
+    }else if (JPC4_Hide === undefined || typeof JPC4_Hide !== 'boolean') {                         
+        return res.status(400).send("Invalid JPC4_Hide, must be true or false!");
+    }
+    
+    // Hide D
+    if (DPC1_Hide === undefined || typeof DPC1_Hide !== 'boolean') { 
+        return res.status(400).send("Invalid DPC1_Hide, must be true or false!");
+    }else if (DPC2_Hide === undefined || typeof DPC2_Hide !== 'boolean') {
+        return res.status(400).send("Invalid DPC2_Hide, must be true or false!");
+    }else if (DPC3_Hide === undefined || typeof DPC3_Hide !== 'boolean') {
+        return res.status(400).send("Invalid DPC3_Hide, must be true or false!");
+    }
+    
+    // Edit Hide J
+    jsonPCStatus.editPCHiddenValue(`JPC1_Hide`, JPC1_Hide);
+    jsonPCStatus.editPCHiddenValue(`JPC2_Hide`, JPC2_Hide);
+    jsonPCStatus.editPCHiddenValue(`JPC3_Hide`, JPC3_Hide);
+    jsonPCStatus.editPCHiddenValue(`JPC4_Hide`, JPC4_Hide);
+
+    // Edit Hide D 
+    jsonPCStatus.editPCHiddenValue(`DPC1_Hide`, DPC1_Hide);
+    jsonPCStatus.editPCHiddenValue(`DPC2_Hide`, DPC2_Hide);
+    jsonPCStatus.editPCHiddenValue(`DPC3_Hide`, DPC3_Hide);
+    
+    return res.status(202).send(`STATUS CODE: 202 Accepted!<br>Check your updated statuses here. <a href="/pc-status/get">/pc-status/get</a>`);
+});
+
+app.get('/status-hide/configs', (req, res) => {
+
+    if(jsonHandler.getJsonValue(`Status`) !== `ON`){
+        return res.status(302).send(`STATUS CODE: 302 Found!<br>Please turn ON the API!`)
+    }
+
+    return res.status(200).send(jsonPCStatus.getStatusAndHideConfigs());
 });

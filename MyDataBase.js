@@ -60,10 +60,39 @@ class JsonHandler {
             return null;
         }
     }
+
     setDeveloperMessage(message){
         try {
             return fs.writeFileSync('DeveloperMessage.txt', message, 'utf8')
         }catch(err){
+            return null;
+        }
+    }
+
+    editPCStatusValue(key, value){
+        if (this.jsonData[0].hasOwnProperty(key)) {
+            this.jsonData[0][key] = value;
+            this.saveData();
+            //console.log(`Value for key '${key}' edited successfully.`);
+        } else {
+            //console.error(`Key '${key}' does not exist in the JSON data.`);
+        }
+    }
+
+    editPCHiddenValue(key, value){
+        if (this.jsonData[1].hasOwnProperty(key)) {
+            this.jsonData[1][key] = value;
+            this.saveData();
+            //console.log(`Value for key '${key}' edited successfully.`);
+        } else {
+            //console.error(`Key '${key}' does not exist in the JSON data.`);
+        }
+    }
+
+    getStatusAndHideConfigs(){
+        try {
+            return fs.readFileSync('MyPCStatus.json', 'utf8');
+        } catch (err) {
             return null;
         }
     }

@@ -1,0 +1,20 @@
+[
+  {
+    "JPC1": "OFF",
+    "JPC2": "ON",
+    "JPC3": "OFF",
+    "JPC4": "OFF",
+    "DPC1": "ON",
+    "DPC2": "OFF",
+    "DPC3": "OFF"
+  },
+  {
+    "JPC1_Hide": true,
+    "JPC2_Hide": true,
+    "JPC3_Hide": true,
+    "JPC4_Hide": false,
+    "DPC1_Hide": false,
+    "DPC2_Hide": true,
+    "DPC3_Hide": true
+  }
+]

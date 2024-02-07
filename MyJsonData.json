@@ -4,7 +4,7 @@
   "Roblox": true,
   "Auto_Clicker": true,
   "Chrome": false,
-  "Brave": false,
+  "Brave": true,
   "isCustomEnabled": true,
   "Custom1": "notepad",
   "Custom2": "None",
